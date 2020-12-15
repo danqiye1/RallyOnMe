@@ -9,6 +9,8 @@ public class Friendly : MonoBehaviour
     public float PanicDistance;
     public float ArcOfFire;
 
+    public Vector3 RallyPoint; // Relative position to officer
+
     Animator anim;
 
     int PanicHash = Animator.StringToHash("Panic");
@@ -69,7 +71,7 @@ public class Friendly : MonoBehaviour
                 anim.SetFloat(SpeedHash, FollowSpeed * direction.magnitude);
 
                 // Move the ally
-                Vector3 TargetPosition = Officer.transform.position + new Vector3(2,0,-2);
+                Vector3 TargetPosition = Officer.transform.position + RallyPoint;
                 transform.position = Vector3.MoveTowards(transform.position, TargetPosition, FollowSpeed * Time.deltaTime);
                 
                 // Sense the closest enemy
