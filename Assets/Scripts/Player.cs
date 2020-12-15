@@ -24,6 +24,9 @@ public class Player : MonoBehaviour
     public GameObject MuzzlePrefab;
     public Transform MuzzleTransform;
 
+    // Death mechanics
+    bool isDead = false;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -57,7 +60,7 @@ public class Player : MonoBehaviour
             anim.SetInteger(deathHash, Random.Range(1, 4));
         }
 
-        if (direction.magnitude >= 0.1f)
+        if (direction.magnitude >= 0.1f && isDead == false)
         {
             // Player Rotation.
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
@@ -70,7 +73,7 @@ public class Player : MonoBehaviour
         }
 
         // Shooting on left click
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && isDead == false)
         {
             anim.SetBool(shootHash, true);
             // Spawn a bullet with an offset
@@ -90,5 +93,15 @@ public class Player : MonoBehaviour
             anim.SetBool(shootHash, false);
         }
 
+    }
+
+    // Death from hitting a bullet
+    void OnCollisionEnter(Collision collision){
+
+        if(collision.transform.CompareTag("Bullet"))
+        {
+            anim.SetInteger(deathHash, Random.Range(1, 4));
+            isDead = true;
+        }
     }
 }

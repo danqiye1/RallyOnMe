@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
     public float FireRate = 1f;
 
     float LastFire;
+    bool isDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +43,7 @@ public class Enemy : MonoBehaviour
         Quaternion aimDir;
         float angle;
         // Rotation to aim at player or friendly.
-        if (dist <= DetectionRange){
+        if (dist <= DetectionRange && isDead == false){
             aimDir = Quaternion.LookRotation(Target.transform.position - transform.position);
             transform.rotation = Quaternion.Slerp(transform.rotation, aimDir, Time.deltaTime);
 
@@ -84,5 +85,15 @@ public class Enemy : MonoBehaviour
 
         return closestFriendly;
 
+    }
+
+    // Death from hitting a bullet
+    void OnCollisionEnter(Collision collision){
+
+        if(collision.transform.CompareTag("Bullet"))
+        {
+            anim.SetInteger(deathHash, Random.Range(1, 4));
+            isDead = true;
+        }
     }
 }
