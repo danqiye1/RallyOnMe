@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public float rotationSpeed = 100.0f;
     public float rotationSmoothTime = 0.1f;
     float rotationSmoothVelocity;
+    Vector3 moveDir;
 
     Animator anim;
 
@@ -21,6 +22,9 @@ public class Player : MonoBehaviour
     public GameObject BulletPrefab;
     public Vector3 BulletSpawnOffset; // Bullet spawn offset
     public float BulletSpeed;
+    public Transform BulletTransform;
+    public GameObject MuzzlePrefab;
+    public Transform MuzzleTransform;
 
     void Start()
     {
@@ -63,19 +67,25 @@ public class Player : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, angle, 0);
 
             // Player movement
-            Vector3 moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
+            moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
             controller.Move(moveDir.normalized * moveSpeed * Time.deltaTime);
         }
 
-        // Shooting
-        if (Input.GetKey(KeyCode.Space))
+        // Shooting on left click
+        if (Input.GetMouseButtonDown(0))
         {
             anim.SetBool(shootHash, true);
-            GameObject Bullet = Instantiate(BulletPrefab, transform.position + BulletSpawnOffset, Quaternion.Euler(90,0,0)); // Spawn a bullet with an offset with 0 rotation
-            Rigidbody rb = Bullet.GetComponent<Rigidbody>(); //Gets the rigidbody component from the bullet and stores it in rb
-            rb.AddForce(transform.forward * BulletSpeed, ForceMode.Impulse); //Move the bullet forward
+            // Spawn a bullet with an offset
+            GameObject Bullet = Instantiate(BulletPrefab, BulletTransform.position, BulletTransform.rotation * Quaternion.Euler(90, 0, 0));
+            // Spawn a muzzle flash
+            GameObject MuzzleFlash = Instantiate(MuzzlePrefab, MuzzleTransform.position, MuzzleTransform.rotation);
+            //Gets the rigidbody component from the bullet and stores it in rb
+            Rigidbody rb = Bullet.GetComponent<Rigidbody>();
+            //Move the bullet forward
+            rb.AddForce(transform.forward * BulletSpeed, ForceMode.Impulse); 
             // ShootSFXAudioSource.Play(); //Plays the shoot SFX
-            Destroy(Bullet, 1f); //Destroy bullet in 1 second.
+            Destroy(Bullet, 1f); //Destroy bullet in 1 second. To Do: Destroy bullet if hit somthing
+            Destroy(MuzzleFlash, 0.2f);
         }
         else
         {
