@@ -21,7 +21,7 @@ public class Enemy : MonoBehaviour
     public float FireRate = 1f;
 
     float LastFire;
-    bool isDead = false;
+    public bool isDead = false;
 
     // Start is called before the first frame update
     void Start()

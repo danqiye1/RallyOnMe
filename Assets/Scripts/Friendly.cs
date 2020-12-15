@@ -92,7 +92,8 @@ public class Friendly : MonoBehaviour
                 // Shoot if enemy or Arc of fire and rate of fire
                 aimDir = Quaternion.LookRotation(Target.transform.position - transform.position);
                 angle = Quaternion.Angle(transform.rotation, aimDir);
-                if(angle <= ArcOfFire && Time.time - LastFire >= FireRate)
+                Enemy TargetEnemy = Target.GetComponent<Enemy>();
+                if(angle <= ArcOfFire && Time.time - LastFire >= FireRate && TargetEnemy.isDead == false)
                 {
                     //Shoot
                     anim.SetBool(shootHash, true);
