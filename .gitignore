@@ -58,3 +58,9 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Ignore 3rd Party Assets
+Assets/ToonyTinyPeople
+Assets/JMO Assets
+Assets/Level Assets
+Assets/*.meta
+
