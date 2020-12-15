@@ -5,7 +5,6 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float moveSpeed = 2.0f;
-    public float rotationSpeed = 100.0f;
     public float rotationSmoothTime = 0.1f;
     float rotationSmoothVelocity;
     Vector3 moveDir;
@@ -20,7 +19,6 @@ public class Player : MonoBehaviour
 
     // Shooting mechanics
     public GameObject BulletPrefab;
-    public Vector3 BulletSpawnOffset; // Bullet spawn offset
     public float BulletSpeed;
     public Transform BulletTransform;
     public GameObject MuzzlePrefab;
