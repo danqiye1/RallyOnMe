@@ -101,8 +101,8 @@ public class Player : MonoBehaviour
 
         if(collision.transform.CompareTag("BulletEnemy"))
         {
-            anim.SetInteger(deathHash, Random.Range(1, 4));
-            isDead = true;
+            // anim.SetInteger(deathHash, Random.Range(1, 4));
+            // isDead = true;
         }
     }
 }

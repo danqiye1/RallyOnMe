@@ -72,12 +72,13 @@ public class Friendly : MonoBehaviour
 
                 // Match follow speed with player
                 FollowSpeed = Officer.GetComponent<Player>().moveSpeed;
-                anim.SetFloat(SpeedHash, FollowSpeed * direction.magnitude);
+                
 
                 // Move the ally
                 Vector3 TargetPosition = Officer.transform.position + RallyPoint;
                 // transform.position = Vector3.MoveTowards(transform.position, TargetPosition, FollowSpeed * Time.deltaTime);
                 _navMeshAgent.SetDestination(TargetPosition);
+                anim.SetFloat(SpeedHash, _navMeshAgent.velocity.magnitude);
                 
                 // Sense the closest enemy
                 GameObject Target;
@@ -143,8 +144,8 @@ public class Friendly : MonoBehaviour
 
         if(collision.transform.CompareTag("BulletEnemy"))
         {
-            anim.SetInteger(deathHash, Random.Range(1, 4));
-            isDead = true;
+            // anim.SetInteger(deathHash, Random.Range(1, 4));
+            // isDead = true;
         }
     }
 }
