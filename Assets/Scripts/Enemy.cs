@@ -55,6 +55,7 @@ public class Enemy : MonoBehaviour
                 anim.SetBool(shootHash, true);
                 // Spawn a bullet with an offset
                 GameObject Bullet = Instantiate(BulletPrefab, BulletTransform.position, BulletTransform.rotation * Quaternion.Euler(90, 0, 0));
+                Bullet.tag = "BulletEnemy";
                 // Spawn a muzzle flash
                 GameObject MuzzleFlash = Instantiate(MuzzlePrefab, MuzzleTransform.position, MuzzleTransform.rotation);
                 //Gets the rigidbody component from the bullet and stores it in rb
@@ -90,7 +91,7 @@ public class Enemy : MonoBehaviour
     // Death from hitting a bullet
     void OnCollisionEnter(Collision collision){
 
-        if(collision.transform.CompareTag("Bullet"))
+        if(collision.transform.CompareTag("BulletFriendly"))
         {
             anim.SetInteger(deathHash, Random.Range(1, 4));
             isDead = true;

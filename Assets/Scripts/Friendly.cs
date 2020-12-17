@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Friendly : MonoBehaviour
 {
@@ -31,11 +32,14 @@ public class Friendly : MonoBehaviour
     public float FireRate = 1f;
     float LastFire;
 
+    // Pathfinding
+    NavMeshAgent _navMeshAgent;
 
     void Start()
     {
         anim = GetComponent<Animator>();
         LastFire = Time.time;
+        _navMeshAgent = this.GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -72,19 +76,14 @@ public class Friendly : MonoBehaviour
 
                 // Move the ally
                 Vector3 TargetPosition = Officer.transform.position + RallyPoint;
-                transform.position = Vector3.MoveTowards(transform.position, TargetPosition, FollowSpeed * Time.deltaTime);
+                // transform.position = Vector3.MoveTowards(transform.position, TargetPosition, FollowSpeed * Time.deltaTime);
+                _navMeshAgent.SetDestination(TargetPosition);
                 
                 // Sense the closest enemy
                 GameObject Target;
                 Target = FindClosestEnemy();
 
-                // Rotation to look at where he is moving to. Else look to the closest enemy
-                if (transform.position != TargetPosition){
-                    lookDir = Quaternion.LookRotation(TargetPosition - transform.position);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, lookDir, Time.deltaTime);
-                }
-                else
-                {
+                if(_navMeshAgent.velocity.magnitude == 0){
                     lookDir = Quaternion.LookRotation(Target.transform.position - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookDir, Time.deltaTime);
                 }
@@ -101,6 +100,7 @@ public class Friendly : MonoBehaviour
                     anim.SetBool(shootHash, true);
                     // Spawn a bullet with an offset
                     GameObject Bullet = Instantiate(BulletPrefab, BulletTransform.position, BulletTransform.rotation * Quaternion.Euler(90, 0, 0));
+                    Bullet.tag = "BulletFriendly";
                     // Spawn a muzzle flash
                     GameObject MuzzleFlash = Instantiate(MuzzlePrefab, MuzzleTransform.position, MuzzleTransform.rotation);
                     //Gets the rigidbody component from the bullet and stores it in rb
@@ -141,7 +141,7 @@ public class Friendly : MonoBehaviour
     // Death from hitting a bullet
     void OnCollisionEnter(Collision collision){
 
-        if(collision.transform.CompareTag("Bullet"))
+        if(collision.transform.CompareTag("BulletEnemy"))
         {
             anim.SetInteger(deathHash, Random.Range(1, 4));
             isDead = true;

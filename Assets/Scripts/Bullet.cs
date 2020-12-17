@@ -10,10 +10,7 @@ public class Bullet : MonoBehaviour
     // Destroy object and spawn effects when collide with something.
     void OnCollisionEnter(Collision obj)
     {
-        if (obj.transform.CompareTag("Ground"))
-        {
-            ImpactEffect = Instantiate(ImpactEffectPrefab, transform.position, Quaternion.Euler(0, 0, 0));
-        }
+        ImpactEffect = Instantiate(ImpactEffectPrefab, transform.position, Quaternion.Euler(0, 0, 0));
         Destroy(transform.gameObject);
     }
 }
