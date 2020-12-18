@@ -64,3 +64,4 @@ Assets/JMO Assets
 Assets/Level Assets
 Assets/*.meta
 
+.DS_Store

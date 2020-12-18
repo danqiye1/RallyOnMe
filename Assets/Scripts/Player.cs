@@ -27,6 +27,13 @@ public class Player : MonoBehaviour
     // Death mechanics
     bool isDead = false;
 
+    // Winning Mechanics
+    public GameObject WinMenu;
+    public GameObject LoseMenu;
+
+    public bool GodMode = true;
+    public GameObject GodModeIndicator;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -55,10 +62,10 @@ public class Player : MonoBehaviour
         }
 
         // Death
-        if (Input.GetKey("mouse 1"))
-        {
-            anim.SetInteger(deathHash, Random.Range(1, 4));
-        }
+        // if (Input.GetKey("mouse 1"))
+        // {
+        //     anim.SetInteger(deathHash, Random.Range(1, 4));
+        // }
 
         if (direction.magnitude >= 0.1f && isDead == false)
         {
@@ -94,15 +101,43 @@ public class Player : MonoBehaviour
             anim.SetBool(shootHash, false);
         }
 
+        // Toggle Godmode
+        if (Input.GetKeyDown("g"))
+        {
+            GodMode = !GodMode;
+            GodModeIndicator.SetActive(GodMode);
+        }
+
+
     }
 
     // Death from hitting a bullet
     void OnCollisionEnter(Collision collision){
 
-        if(collision.transform.CompareTag("BulletEnemy"))
+        if(collision.transform.CompareTag("BulletEnemy") && GodMode == false)
         {
-            // anim.SetInteger(deathHash, Random.Range(1, 4));
-            // isDead = true;
+            anim.SetInteger(deathHash, Random.Range(1, 4));
+            isDead = true;
+            LoseMenu.SetActive(true);
+        }
+        else if( collision.gameObject.tag == "Flag")
+        {
+            // Win
+            WinMenu.SetActive(true);
+            GodMode = true;
+            Debug.Log("Win");
         }
     }
+
+    // Death from hitting a bullet
+    void OnCollisionTrigger(Collision collision){
+        
+        if(collision.transform.CompareTag("Flag"))
+        {
+            // Win
+            WinMenu.SetActive(true);
+            Debug.Log("Win");
+        }
+    }
+
 }
