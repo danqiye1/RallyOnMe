@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
     // Winning Mechanics
     public GameObject WinMenu;
     public GameObject LoseMenu;
+    public GameObject flag;
 
     public bool GodMode = true;
     public GameObject GodModeIndicator;
@@ -60,12 +61,6 @@ public class Player : MonoBehaviour
             anim.SetBool("Sprint", false);
             moveSpeed = 2.0f;
         }
-
-        // Death
-        // if (Input.GetKey("mouse 1"))
-        // {
-        //     anim.SetInteger(deathHash, Random.Range(1, 4));
-        // }
 
         if (direction.magnitude >= 0.1f && isDead == false)
         {
@@ -108,6 +103,14 @@ public class Player : MonoBehaviour
             GodModeIndicator.SetActive(GodMode);
         }
 
+        // Toggle Win
+        Vector3 DistToFlag = transform.position - flag.transform.position;
+        if (DistToFlag.magnitude <= 1){
+            // Win
+            WinMenu.SetActive(true);
+            GodMode = true;
+        }
+
 
     }
 
@@ -125,17 +128,6 @@ public class Player : MonoBehaviour
             // Win
             WinMenu.SetActive(true);
             GodMode = true;
-            Debug.Log("Win");
-        }
-    }
-
-    // Death from hitting a bullet
-    void OnCollisionTrigger(Collision collision){
-        
-        if(collision.transform.CompareTag("Flag"))
-        {
-            // Win
-            WinMenu.SetActive(true);
             Debug.Log("Win");
         }
     }
